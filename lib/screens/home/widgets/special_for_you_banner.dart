@@ -11,14 +11,7 @@ class SpecialForYouBanner extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Special for you',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textWhite,
-            ),
-          ),
+          const Text('Special for you', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textWhite)),
           const SizedBox(height: 14),
           _BannerCard(),
         ],
@@ -34,25 +27,17 @@ class _BannerCard extends StatelessWidget {
       height: 130,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
-          colors: [Color(0xFF6B4226), Color(0xFFC58B60)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
+        gradient: const LinearGradient(colors: [Color(0xFF6B4226), Color(0xFFC58B60)], begin: Alignment.centerLeft, end: Alignment.centerRight),
       ),
       child: Row(
         children: [
           Expanded(
             flex: 2,
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                bottomLeft: Radius.circular(20),
-              ),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
               child: Image.network(
                 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=300&q=80',
-                height: 130,
-                fit: BoxFit.cover,
+                height: 130, fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(color: const Color(0xFF6B4226)),
               ),
             ),
@@ -67,25 +52,11 @@ class _BannerCard extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Text(
-                      'Today\'s pick',
-                      style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600),
-                    ),
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(6)),
+                    child: const Text("Today's pick", style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600)),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Specially mixed\nand brewed within\nyou must try',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      height: 1.5,
-                    ),
-                  ),
+                  const Text('Specially mixed\nand brewed within\nyou must try', style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500, height: 1.5)),
                 ],
               ),
             ),

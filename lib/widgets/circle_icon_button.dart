@@ -9,15 +9,7 @@ class CircleIconButton extends StatelessWidget {
   final double size;
   final double iconSize;
 
-  const CircleIconButton({
-    super.key,
-    required this.icon,
-    required this.onTap,
-    this.bgColor,
-    this.iconColor,
-    this.size = 42,
-    this.iconSize = 18,
-  });
+  const CircleIconButton({super.key, required this.icon, required this.onTap, this.bgColor, this.iconColor, this.size = 42, this.iconSize = 18});
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +21,9 @@ class CircleIconButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: bgColor ?? AppColors.bgCard,
           shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 6, offset: const Offset(0, 2))],
         ),
-        child: Icon(
-          icon,
-          size: iconSize,
-          color: iconColor ?? AppColors.textWhite,
-        ),
+        child: Icon(icon, size: iconSize, color: iconColor ?? AppColors.textWhite),
       ),
     );
   }

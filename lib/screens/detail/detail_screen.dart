@@ -23,9 +23,7 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Lấy argument 1 lần duy nhất khi route đã sẵn sàng
-    _coffee ??= ModalRoute.of(context)?.settings.arguments as CoffeeModel?
-        ?? sampleCoffees[0];
+    _coffee ??= ModalRoute.of(context)?.settings.arguments as CoffeeModel? ?? sampleCoffees[0];
   }
 
   CoffeeModel get coffee => _coffee ?? sampleCoffees[0];
@@ -34,7 +32,6 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currentCoffee = coffee;
     return Scaffold(
       backgroundColor: AppColors.bgWhite,
       body: Column(
@@ -44,36 +41,25 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  DetailHeaderImage(coffee: currentCoffee),
-                  _buildBody(currentCoffee),
+                  DetailHeaderImage(coffee: coffee),
+                  _buildBody(),
                 ],
               ),
             ),
           ),
-          DetailBottomBar(
-            totalPrice: _totalPrice,
-            onAddToCart: () {},
-          ),
+          DetailBottomBar(totalPrice: _totalPrice, onAddToCart: () {}),
         ],
       ),
     );
   }
 
-  Widget _buildBody(CoffeeModel coffee) {
+  Widget _buildBody() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Description section
-          const Text(
-            'Description',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textDark,
-            ),
-          ),
+          const Text('Description', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textDark)),
           const SizedBox(height: 10),
           GestureDetector(
             onTap: () => setState(() => _descExpanded = !_descExpanded),
@@ -82,47 +68,30 @@ class _DetailScreenState extends State<DetailScreen> {
               children: [
                 Text(
                   coffee.description,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.textHint,
-                    height: 1.7,
-                  ),
+                  style: const TextStyle(fontSize: 13, color: AppColors.textHint, height: 1.7),
                   maxLines: _descExpanded ? null : 3,
                   overflow: _descExpanded ? null : TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   _descExpanded ? 'Read less' : 'Read more',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 24),
-          // Divider
           const Divider(color: Color(0xFFEEEEEE), height: 1),
           const SizedBox(height: 24),
-          // Chocolate
-          ChocolateSelector(
-            selected: _selectedChocolate,
-            onChanged: (v) => setState(() => _selectedChocolate = v),
-          ),
+          ChocolateSelector(selected: _selectedChocolate, onChanged: (v) => setState(() => _selectedChocolate = v)),
           const SizedBox(height: 24),
-          // Divider
           const Divider(color: Color(0xFFEEEEEE), height: 1),
           const SizedBox(height: 24),
-          // Size + quantity
           SizeSelector(
             selectedSize: _selectedSize,
             quantity: _quantity,
             onSizeChanged: (v) => setState(() => _selectedSize = v),
-            onDecrease: () {
-              if (_quantity > 1) setState(() => _quantity--);
-            },
+            onDecrease: () { if (_quantity > 1) setState(() => _quantity--); },
             onIncrease: () => setState(() => _quantity++),
           ),
           const SizedBox(height: 24),

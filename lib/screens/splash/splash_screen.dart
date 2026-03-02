@@ -8,12 +8,12 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFD5C9A5),
+    return const Scaffold(
+      backgroundColor: Color(0xFFD5C9A5),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 32, 24, 40),
-          child: const Column(
+          padding: EdgeInsets.fromLTRB(24, 32, 24, 40),
+          child: Column(
             children: [
               SplashCoffeeImage(),
               SizedBox(height: 40),

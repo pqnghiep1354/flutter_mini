@@ -7,25 +7,14 @@ class ChocolateSelector extends StatelessWidget {
 
   static const _options = ['White Chocolate', 'Milk Chocolate', 'Dark Chocolate'];
 
-  const ChocolateSelector({
-    super.key,
-    required this.selected,
-    required this.onChanged,
-  });
+  const ChocolateSelector({super.key, required this.selected, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Choice of Chocolate',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textDark,
-          ),
-        ),
+        const Text('Choice of Chocolate', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textDark)),
         const SizedBox(height: 12),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -41,18 +30,9 @@ class ChocolateSelector extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isSelected ? AppColors.primary : Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: isSelected ? AppColors.primary : Colors.grey.shade300,
-                    ),
+                    border: Border.all(color: isSelected ? AppColors.primary : Colors.grey.shade300),
                   ),
-                  child: Text(
-                    option,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: isSelected ? Colors.white : AppColors.textHint,
-                    ),
-                  ),
+                  child: Text(option, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: isSelected ? Colors.white : AppColors.textHint)),
                 ),
               );
             }).toList(),

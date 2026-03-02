@@ -42,7 +42,13 @@ class CartItem {
   double get totalPrice => coffee.price * quantity;
 }
 
-// ─── Sample Data ───────────────────────────────────────────────
+const List<String> coffeeCategories = [
+  'Espresso',
+  'Latte',
+  'Cappuccino',
+  'Cafetière',
+];
+
 const List<CoffeeModel> sampleCoffees = [
   CoffeeModel(
     id: '1',
@@ -53,7 +59,7 @@ const List<CoffeeModel> sampleCoffees = [
     reviewCount: 1240,
     imageUrl: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=400&q=80',
     category: 'Espresso',
-    description: 'A bold and rich espresso made with the finest coffee beans sourced from Ethiopian highlands. Perfect balance of bitterness and acidity.',
+    description: 'A bold and rich espresso made with the finest coffee beans sourced from Ethiopian highlands. Perfect balance of bitterness and acidity with a velvety crema on top.',
     isPopular: true,
   ),
   CoffeeModel(
@@ -65,7 +71,7 @@ const List<CoffeeModel> sampleCoffees = [
     reviewCount: 890,
     imageUrl: 'https://images.unsplash.com/photo-1521302080334-4bebac2763a6?w=400&q=80',
     category: 'Espresso',
-    description: 'A concentrated shot of espresso with a sweeter, more intense flavor than a regular espresso. Made with half the amount of water.',
+    description: 'A concentrated shot of espresso with a sweeter, more intense flavor than a regular espresso. Made with half the amount of water for a bolder taste.',
     isPopular: false,
   ),
   CoffeeModel(
@@ -89,7 +95,7 @@ const List<CoffeeModel> sampleCoffees = [
     reviewCount: 2100,
     imageUrl: 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=400&q=80',
     category: 'Latte',
-    description: 'Velvety microfoam milk poured over a rich double ristretto. Stronger than a latte with a silky smooth texture.',
+    description: 'Velvety microfoam milk poured over a rich double ristretto. Stronger than a latte with a silky smooth texture and a higher coffee-to-milk ratio.',
     isPopular: true,
   ),
   CoffeeModel(
@@ -101,7 +107,7 @@ const List<CoffeeModel> sampleCoffees = [
     reviewCount: 3400,
     imageUrl: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=400&q=80',
     category: 'Latte',
-    description: 'Creamy steamed milk with espresso and rich caramel syrup, topped with whipped cream and a drizzle of caramel sauce.',
+    description: 'Creamy steamed milk with espresso and rich caramel syrup, topped with whipped cream and a generous drizzle of caramel sauce.',
     isPopular: true,
   ),
   CoffeeModel(
@@ -113,19 +119,19 @@ const List<CoffeeModel> sampleCoffees = [
     reviewCount: 1850,
     imageUrl: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80',
     category: 'Latte',
-    description: 'Espresso meets warm steamed milk infused with pure Madagascar vanilla. A comforting and aromatic classic.',
+    description: 'Espresso meets warm steamed milk infused with pure Madagascar vanilla. A comforting and aromatic classic for any time of the day.',
     isPopular: false,
   ),
   CoffeeModel(
     id: '7',
-    name: 'Classic Cappuccino',
+    name: 'Cappuccino',
     subtitle: 'foamy & balanced',
     price: 4.40,
     rating: 4.6,
     reviewCount: 2760,
     imageUrl: 'https://images.unsplash.com/photo-1568649929103-28ffbefaca1e?w=400&q=80',
     category: 'Cappuccino',
-    description: 'The iconic Italian classic: equal parts espresso, steamed milk, and velvety foam. Dusted with fine cocoa powder.',
+    description: 'The iconic Italian classic: equal parts espresso, steamed milk, and velvety foam. Dusted with fine cocoa powder for the perfect finish.',
     isPopular: true,
   ),
   CoffeeModel(
@@ -137,7 +143,7 @@ const List<CoffeeModel> sampleCoffees = [
     reviewCount: 580,
     imageUrl: 'https://images.unsplash.com/photo-1534778101976-62847782c213?w=400&q=80',
     category: 'Cappuccino',
-    description: 'Extra foam, less milk. For those who love the boldness of espresso with just a cloud of milk foam on top.',
+    description: 'Extra foam, less milk. For those who love the boldness of espresso with just a cloud of microfoam on top. Bold, intense, unforgettable.',
     isPopular: false,
   ),
   CoffeeModel(
@@ -149,7 +155,7 @@ const List<CoffeeModel> sampleCoffees = [
     reviewCount: 940,
     imageUrl: 'https://images.unsplash.com/photo-1504627298434-2a81df87e30d?w=400&q=80',
     category: 'Cafetière',
-    description: 'Hot brewed coffee with Irish whiskey and brown sugar, topped with thick cream. A warming classic for cold evenings.',
+    description: 'Hot brewed coffee with a touch of brown sugar, topped with thick lightly whipped cream. A warming classic perfect for cold evenings.',
     isPopular: false,
   ),
   CoffeeModel(
@@ -161,14 +167,7 @@ const List<CoffeeModel> sampleCoffees = [
     reviewCount: 4200,
     imageUrl: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=400&q=80',
     category: 'Cafetière',
-    description: 'Coffee steeped in cold water for 20 hours. Incredibly smooth, naturally sweet and with a lower acidity profile.',
+    description: 'Coffee steeped in cold water for 20 hours. Incredibly smooth, naturally sweet with a lower acidity than regular coffee. Served over ice.',
     isPopular: true,
   ),
-];
-
-const List<String> coffeeCategories = [
-  'Espresso',
-  'Latte',
-  'Cappuccino',
-  'Cafetière',
 ];

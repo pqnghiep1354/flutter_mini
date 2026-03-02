@@ -1,7 +1,9 @@
 class RouterName {
-  static const String splash    = '/';
-  static const String home      = '/home';
-  static const String cart      = '/cart';
-  static const String category  = '/category';
-  static const String detail    = '/detail';
+  RouterName._();
+
+  static const String demoSplash = '/';
+  static const String splash     = '/splash';
+  static const String root       = '/root';
+  static const String category   = '/category';
+  static const String detail     = '/detail';
 }

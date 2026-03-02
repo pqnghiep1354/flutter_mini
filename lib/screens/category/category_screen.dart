@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/coffee_model.dart';
 import '../../utils/app_colors.dart';
-import '../../widgets/bottom_nav_bar.dart';
 import 'widgets/category_app_bar.dart';
 import 'widgets/category_grid.dart';
 
@@ -10,9 +9,7 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categoryName =
-        ModalRoute.of(context)?.settings.arguments as String? ?? coffeeCategories.first;
-
+    final categoryName = ModalRoute.of(context)?.settings.arguments as String? ?? coffeeCategories.first;
     final coffees = sampleCoffees.where((c) => c.category == categoryName).toList();
 
     return Scaffold(
@@ -20,14 +17,11 @@ class CategoryScreen extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(
-              child: CategoryAppBar(categoryName: categoryName),
-            ),
+            SliverToBoxAdapter(child: CategoryAppBar(categoryName: categoryName)),
             CategoryGrid(coffees: coffees),
           ],
         ),
       ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: 0),
     );
   }
 }

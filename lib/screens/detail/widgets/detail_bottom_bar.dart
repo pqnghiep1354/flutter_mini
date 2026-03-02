@@ -6,11 +6,7 @@ class DetailBottomBar extends StatelessWidget {
   final double totalPrice;
   final VoidCallback onAddToCart;
 
-  const DetailBottomBar({
-    super.key,
-    required this.totalPrice,
-    required this.onAddToCart,
-  });
+  const DetailBottomBar({super.key, required this.totalPrice, required this.onAddToCart});
 
   @override
   Widget build(BuildContext context) {
@@ -26,19 +22,9 @@ class DetailBottomBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Price',
-                style: TextStyle(fontSize: 12, color: AppColors.textGrey),
-              ),
+              const Text('Price', style: TextStyle(fontSize: 12, color: AppColors.textGrey)),
               const SizedBox(height: 2),
-              Text(
-                '\$${totalPrice.toStringAsFixed(2)}',
-                style: const TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textDark,
-                ),
-              ),
+              Text('\$${totalPrice.toStringAsFixed(2)}', style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.textDark)),
             ],
           ),
           const SizedBox(width: 20),
@@ -50,39 +36,20 @@ class DetailBottomBar extends StatelessWidget {
                   onAddToCart();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: const Row(
-                        children: [
-                          Icon(Icons.check_circle, color: Colors.white),
-                          SizedBox(width: 10),
-                          Text('Added to cart!'),
-                        ],
-                      ),
+                      content: const Row(children: [Icon(Icons.check_circle, color: Colors.white), SizedBox(width: 10), Text('Added to cart!')]),
                       backgroundColor: AppColors.primary,
                       behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      action: SnackBarAction(
-                        label: 'View Cart',
-                        textColor: Colors.white,
-                        onPressed: () => Navigator.pushNamed(context, RouterName.cart),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      action: SnackBarAction(label: 'View Cart', textColor: Colors.white, onPressed: () => Navigator.pushNamed(context, RouterName.root)),
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  elevation: 4,
-                  shadowColor: AppColors.primary.withOpacity(0.4),
+                  backgroundColor: AppColors.primary, foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  elevation: 4, shadowColor: AppColors.primary.withOpacity(0.4),
                 ),
-                child: const Text(
-                  'Buy Now',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                ),
+                child: const Text('Buy Now', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
               ),
             ),
           ),

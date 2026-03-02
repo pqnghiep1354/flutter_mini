@@ -13,37 +13,17 @@ class CategoryAppBar extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
         children: [
-          CircleIconButton(
-            icon: Icons.arrow_back_ios_new_rounded,
-            iconSize: 16,
-            onTap: () => Navigator.pop(context),
-          ),
+          CircleIconButton(icon: Icons.arrow_back_ios_new_rounded, iconSize: 16, onTap: () => Navigator.pop(context)),
           Expanded(
-            child: Text(
-              categoryName,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: AppColors.primary,
-              ),
-            ),
+            child: Text(categoryName, textAlign: TextAlign.center, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.primary)),
           ),
           Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.primary, width: 2),
-            ),
+            width: 44, height: 44,
+            decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primary, width: 2)),
             child: ClipOval(
               child: Image.network(
-                'https://i.pravatar.cc/100?img=5',
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  color: AppColors.primaryDark,
-                  child: const Icon(Icons.person, color: Colors.white, size: 20),
-                ),
+                'https://i.pravatar.cc/100?img=5', fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(color: AppColors.primaryDark, child: const Icon(Icons.person, color: Colors.white, size: 20)),
               ),
             ),
           ),

@@ -13,10 +13,7 @@ class HomeSearchBar extends StatelessWidget {
           Expanded(
             child: Container(
               height: 50,
-              decoration: BoxDecoration(
-                color: AppColors.inputBg,
-                borderRadius: BorderRadius.circular(14),
-              ),
+              decoration: BoxDecoration(color: AppColors.inputBg, borderRadius: BorderRadius.circular(14)),
               child: const TextField(
                 style: TextStyle(color: AppColors.textWhite, fontSize: 14),
                 decoration: InputDecoration(
@@ -31,12 +28,8 @@ class HomeSearchBar extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.circular(14),
-            ),
+            width: 50, height: 50,
+            decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(14)),
             child: const Icon(Icons.tune_rounded, color: Colors.white, size: 22),
           ),
         ],

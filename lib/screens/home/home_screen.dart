@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/coffee_model.dart';
 import '../../utils/app_colors.dart';
-import '../../widgets/bottom_nav_bar.dart';
 import 'widgets/home_header.dart';
 import 'widgets/home_search_bar.dart';
 import 'widgets/category_tab_bar.dart';
@@ -28,10 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(child: const HomeHeader()),
-            SliverToBoxAdapter(child: const HomeSearchBar()),
-            SliverToBoxAdapter(child: const SizedBox(height: 24)),
-            // Category tabs
+            const SliverToBoxAdapter(child: HomeHeader()),
+            const SliverToBoxAdapter(child: HomeSearchBar()),
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
             SliverToBoxAdapter(
               child: CategoryTabBar(
                 categories: coffeeCategories,
@@ -39,22 +37,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 onCategoryChanged: (cat) => setState(() => _selectedCategory = cat),
               ),
             ),
-            SliverToBoxAdapter(child: const SizedBox(height: 18)),
-            // Coffee list
+            const SliverToBoxAdapter(child: SizedBox(height: 18)),
             SliverToBoxAdapter(
-              child: CoffeeHorizontalList(
-                coffees: _filtered,
-                category: _selectedCategory,
-              ),
+              child: CoffeeHorizontalList(coffees: _filtered, category: _selectedCategory),
             ),
-            SliverToBoxAdapter(child: const SizedBox(height: 28)),
-            // Special section
-            SliverToBoxAdapter(child: const SpecialForYouBanner()),
-            SliverToBoxAdapter(child: const SizedBox(height: 30)),
+            const SliverToBoxAdapter(child: SizedBox(height: 28)),
+            const SliverToBoxAdapter(child: SpecialForYouBanner()),
+            const SliverToBoxAdapter(child: SizedBox(height: 30)),
           ],
         ),
       ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: 0),
     );
   }
 }

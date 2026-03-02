@@ -11,14 +11,7 @@ class SizeSelector extends StatelessWidget {
 
   static const _sizes = ['S', 'M', 'L'];
 
-  const SizeSelector({
-    super.key,
-    required this.selectedSize,
-    required this.quantity,
-    required this.onSizeChanged,
-    required this.onDecrease,
-    required this.onIncrease,
-  });
+  const SizeSelector({super.key, required this.selectedSize, required this.quantity, required this.onSizeChanged, required this.onDecrease, required this.onIncrease});
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +21,7 @@ class SizeSelector extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Size',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textDark,
-                ),
-              ),
+              const Text('Size', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textDark)),
               const SizedBox(height: 12),
               Row(
                 children: _sizes.map((size) {
@@ -45,34 +31,14 @@ class SizeSelector extends StatelessWidget {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 180),
                       margin: const EdgeInsets.only(right: 10),
-                      width: 46,
-                      height: 46,
+                      width: 46, height: 46,
                       decoration: BoxDecoration(
                         color: isSelected ? AppColors.primary : Colors.grey.shade100,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isSelected ? AppColors.primary : Colors.grey.shade300,
-                        ),
-                        boxShadow: isSelected
-                            ? [
-                                BoxShadow(
-                                  color: AppColors.primary.withOpacity(0.35),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                )
-                              ]
-                            : null,
+                        border: Border.all(color: isSelected ? AppColors.primary : Colors.grey.shade300),
+                        boxShadow: isSelected ? [BoxShadow(color: AppColors.primary.withOpacity(0.35), blurRadius: 8, offset: const Offset(0, 4))] : null,
                       ),
-                      child: Center(
-                        child: Text(
-                          size,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
-                            color: isSelected ? Colors.white : AppColors.textHint,
-                          ),
-                        ),
-                      ),
+                      child: Center(child: Text(size, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: isSelected ? Colors.white : AppColors.textHint))),
                     ),
                   );
                 }).toList(),
@@ -80,12 +46,7 @@ class SizeSelector extends StatelessWidget {
             ],
           ),
         ),
-        QuantityCounter(
-          quantity: quantity,
-          onDecrease: onDecrease,
-          onIncrease: onIncrease,
-          darkMode: false,
-        ),
+        QuantityCounter(quantity: quantity, onDecrease: onDecrease, onIncrease: onIncrease, darkMode: false),
       ],
     );
   }

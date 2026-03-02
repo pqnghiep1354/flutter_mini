@@ -20,7 +20,6 @@ class CategoryGrid extends StatelessWidget {
           crossAxisCount: 2,
           mainAxisSpacing: 16,
           crossAxisSpacing: 14,
-          // Tăng lên để card có đủ chiều cao
           childAspectRatio: 0.68,
         ),
       ),
