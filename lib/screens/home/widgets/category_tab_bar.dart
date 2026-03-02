@@ -3,12 +3,14 @@ import '../../../utils/app_colors.dart';
 
 class CategoryTabBar extends StatefulWidget {
   final List<String> categories;
-  final Function(String) onCategorySelected;
+  final String selectedCategory;
+  final ValueChanged<String> onCategoryChanged;
 
   const CategoryTabBar({
     super.key,
     required this.categories,
-    required this.onCategorySelected,
+    required this.selectedCategory,
+    required this.onCategoryChanged,
   });
 
   @override
@@ -16,45 +18,42 @@ class CategoryTabBar extends StatefulWidget {
 }
 
 class _CategoryTabBarState extends State<CategoryTabBar> {
-  int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 36,
+      height: 38,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: widget.categories.length,
         itemBuilder: (context, index) {
-          final isSelected = index == _selectedIndex;
+          final cat = widget.categories[index];
+          final isSelected = cat == widget.selectedCategory;
           return GestureDetector(
-            onTap: () {
-              setState(() => _selectedIndex = index);
-              widget.onCategorySelected(widget.categories[index]);
-            },
+            onTap: () => widget.onCategoryChanged(cat),
             child: Container(
-              margin: const EdgeInsets.only(right: 20),
+              margin: const EdgeInsets.only(right: 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    widget.categories[index],
+                    cat,
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
                       color: isSelected ? AppColors.primary : AppColors.textGrey,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  if (isSelected)
-                    Container(
-                      height: 2,
-                      width: 20,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
+                  const SizedBox(height: 6),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    width: isSelected ? 24 : 0,
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(3),
                     ),
+                  ),
                 ],
               ),
             ),

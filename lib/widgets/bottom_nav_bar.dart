@@ -10,60 +10,22 @@ class AppBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
+      decoration: const BoxDecoration(
+        color: AppColors.bgCard,
+        border: Border(
+          top: BorderSide(color: AppColors.divider, width: 0.5),
+        ),
       ),
       child: SafeArea(
         child: SizedBox(
           height: 60,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _NavItem(
-                icon: Icons.home_rounded,
-                index: 0,
-                currentIndex: currentIndex,
-                onTap: () {
-                  if (currentIndex != 0) {
-                    Navigator.pushReplacementNamed(context, RouterName.home);
-                  }
-                },
-              ),
-              _NavItem(
-                icon: Icons.favorite_border_rounded,
-                index: 1,
-                currentIndex: currentIndex,
-                onTap: () {},
-              ),
-              _NavItem(
-                icon: Icons.shopping_bag_outlined,
-                index: 2,
-                currentIndex: currentIndex,
-                onTap: () {
-                  if (currentIndex != 2) {
-                    Navigator.pushReplacementNamed(context, RouterName.cart);
-                  }
-                },
-              ),
-              _NavItem(
-                icon: Icons.notifications_none_rounded,
-                index: 3,
-                currentIndex: currentIndex,
-                onTap: () {},
-              ),
-              _NavItem(
-                icon: Icons.person_outline_rounded,
-                index: 4,
-                currentIndex: currentIndex,
-                onTap: () {},
-              ),
+              _NavItem(icon: Icons.home_rounded,              label: 'Home',    index: 0, currentIndex: currentIndex, route: RouterName.home),
+              _NavItem(icon: Icons.favorite_border_rounded,   label: 'Wishlist', index: 1, currentIndex: currentIndex, route: null),
+              _NavItem(icon: Icons.shopping_bag_outlined,     label: 'Cart',    index: 2, currentIndex: currentIndex, route: RouterName.cart),
+              _NavItem(icon: Icons.notifications_none_rounded,label: 'Alerts',  index: 3, currentIndex: currentIndex, route: null),
+              _NavItem(icon: Icons.person_outline_rounded,    label: 'Profile', index: 4, currentIndex: currentIndex, route: null),
             ],
           ),
         ),
@@ -74,29 +36,66 @@ class AppBottomNavBar extends StatelessWidget {
 
 class _NavItem extends StatelessWidget {
   final IconData icon;
+  final String label;
   final int index;
   final int currentIndex;
-  final VoidCallback onTap;
+  final String? route;
 
   const _NavItem({
     required this.icon,
+    required this.label,
     required this.index,
     required this.currentIndex,
-    required this.onTap,
+    required this.route,
   });
 
   @override
   Widget build(BuildContext context) {
     final isActive = index == currentIndex;
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Icon(
-          icon,
-          color: isActive ? AppColors.primary : AppColors.textGrey,
-          size: 26,
+    return Expanded(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          if (!isActive && route != null) {
+            Navigator.pushReplacementNamed(context, route!);
+          }
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(
+                  icon,
+                  size: 24,
+                  color: isActive ? AppColors.primary : AppColors.textGrey,
+                ),
+                if (index == 2)
+                  Positioned(
+                    top: -4,
+                    right: -6,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: const BoxDecoration(
+                        color: AppColors.orange,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 3),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10,
+                color: isActive ? AppColors.primary : AppColors.textGrey,
+                fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+              ),
+            ),
+          ],
         ),
       ),
     );
