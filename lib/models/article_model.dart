@@ -23,15 +23,21 @@ class Article {
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
-      id: json['id'] ?? 0,
+      id: json['id'] is int
+          ? json['id']
+          : int.tryParse(json['id']?.toString() ?? '0') ?? 0,
       title: json['title'] ?? '',
       description: json['description'],
       content: json['content'],
       thumb: json['thumb'],
-      categoryId: json['category_id'],
+      categoryId: json['category_id'] is int
+          ? json['category_id']
+          : int.tryParse(json['category_id']?.toString() ?? ''),
       categoryName: json['category'] != null ? json['category']['name'] : null,
       createdAt: json['created_at'],
-      views: json['views'],
+      views: json['views'] is int
+          ? json['views']
+          : int.tryParse(json['views']?.toString() ?? ''),
     );
   }
 }

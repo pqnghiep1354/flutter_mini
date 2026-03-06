@@ -1,229 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../config/routes/app_router.dart';
-import '../../providers/auth_provider.dart';
+import 'widgets/register_form_widget.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
-  @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
-}
-
-class _RegisterScreenState extends State<RegisterScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameCtrl = TextEditingController();
-  final _emailCtrl = TextEditingController();
-  final _passwordCtrl = TextEditingController();
-  final _phoneCtrl = TextEditingController();
-  final _addressCtrl = TextEditingController();
-  bool _obscure = true;
-
-  @override
-  void dispose() {
-    _nameCtrl.dispose();
-    _emailCtrl.dispose();
-    _passwordCtrl.dispose();
-    _phoneCtrl.dispose();
-    _addressCtrl.dispose();
-    super.dispose();
-  }
-
-  Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) return;
-    final auth = context.read<AuthProvider>();
-    final success = await auth.register(
-      name: _nameCtrl.text.trim(),
-      email: _emailCtrl.text.trim(),
-      password: _passwordCtrl.text,
-      phone: _phoneCtrl.text.trim(),
-      address: _addressCtrl.text.trim(),
-    );
-    if (success && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Registration successful! Please sign in.'),
-          behavior: SnackBarBehavior.floating,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          backgroundColor: const Color(0xFF43E97B),
-        ),
-      );
-      Navigator.pushReplacementNamed(context, AppRouter.login);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.watch<AuthProvider>();
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(24.w),
             child: Column(children: [
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20.w),
                 decoration: BoxDecoration(
                   color: const Color(0xFF6C63FF).withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.person_add_outlined,
-                    color: Color(0xFF6C63FF), size: 48),
+                child: Icon(Icons.person_add_outlined,
+                    color: const Color(0xFF6C63FF), size: 48.sp),
               ),
-              const SizedBox(height: 24),
-              const Text('Create Account',
+              SizedBox(height: 24.h),
+              Text('Create Account',
                   style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 28.sp,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1A1A2E))),
-              const SizedBox(height: 8),
+                      color: const Color(0xFF1A1A2E))),
+              SizedBox(height: 8.h),
               Text('Sign up to get started',
-                  style: TextStyle(color: Colors.grey[600], fontSize: 15)),
-              const SizedBox(height: 32),
-              Form(
-                key: _formKey,
-                child: Column(children: [
-                  _buildField(
-                    controller: _nameCtrl,
-                    label: 'Full Name',
-                    icon: Icons.person_outline,
-                    validator: (v) =>
-                        v == null || v.isEmpty ? 'Name is required' : null,
-                  ),
-                  const SizedBox(height: 14),
-                  _buildField(
-                    controller: _emailCtrl,
-                    label: 'Email',
-                    icon: Icons.email_outlined,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (v) =>
-                        v == null || v.isEmpty ? 'Email is required' : null,
-                  ),
-                  const SizedBox(height: 14),
-                  _buildField(
-                    controller: _passwordCtrl,
-                    label: 'Password',
-                    icon: Icons.lock_outline,
-                    obscure: _obscure,
-                    suffix: IconButton(
-                      icon: Icon(
-                          _obscure ? Icons.visibility_off : Icons.visibility,
-                          color: Colors.grey),
-                      onPressed: () => setState(() => _obscure = !_obscure),
-                    ),
-                    validator: (v) =>
-                        v == null || v.length < 6 ? 'Min 6 characters' : null,
-                  ),
-                  const SizedBox(height: 14),
-                  _buildField(
-                    controller: _phoneCtrl,
-                    label: 'Phone (optional)',
-                    icon: Icons.phone_outlined,
-                    keyboardType: TextInputType.phone,
-                  ),
-                  const SizedBox(height: 14),
-                  _buildField(
-                    controller: _addressCtrl,
-                    label: 'Address (optional)',
-                    icon: Icons.location_on_outlined,
-                  ),
-                ]),
-              ),
-              if (auth.error != null)
-                Container(
-                  margin: const EdgeInsets.only(top: 12),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.red.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(children: [
-                    const Icon(Icons.error_outline,
-                        color: Colors.red, size: 20),
-                    const SizedBox(width: 8),
-                    Expanded(
-                        child: Text(auth.error!,
-                            style: const TextStyle(
-                                color: Colors.red, fontSize: 13))),
-                  ]),
-                ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: auth.isLoading ? null : _submit,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6C63FF),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14)),
-                    elevation: 0,
-                  ),
-                  child: auth.isLoading
-                      ? const SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                              strokeWidth: 2.5, color: Colors.white))
-                      : const Text('Sign Up',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600)),
-                ),
-              ),
-              const SizedBox(height: 20),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 15.sp)),
+              SizedBox(height: 32.h),
+              const RegisterFormWidget(),
+              SizedBox(height: 20.h),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text('Already have an account? ',
-                    style: TextStyle(color: Colors.grey[600])),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14.sp)),
                 GestureDetector(
                   onTap: () =>
                       Navigator.pushReplacementNamed(context, AppRouter.login),
-                  child: const Text('Sign In',
+                  child: Text('Sign In',
                       style: TextStyle(
-                          color: Color(0xFF6C63FF),
-                          fontWeight: FontWeight.w600)),
+                          color: const Color(0xFF6C63FF),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14.sp)),
                 ),
               ]),
             ]),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    TextInputType? keyboardType,
-    bool obscure = false,
-    Widget? suffix,
-    String? Function(String?)? validator,
-  }) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      obscureText: obscure,
-      validator: validator,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon, color: const Color(0xFF6C63FF)),
-        suffixIcon: suffix,
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFF6C63FF), width: 1.5),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Colors.red, width: 1),
         ),
       ),
     );

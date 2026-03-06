@@ -14,7 +14,6 @@ class ShimmerLoading extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header shimmer
             Row(children: [
               _box(50, 50, radius: 12),
               const SizedBox(width: 12),
@@ -25,10 +24,8 @@ class ShimmerLoading extends StatelessWidget {
               ]),
             ]),
             const SizedBox(height: 28),
-            // Section title shimmer
             _box(120, 18, radius: 6),
             const SizedBox(height: 16),
-            // Category grid shimmer
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -43,10 +40,8 @@ class ShimmerLoading extends StatelessWidget {
                   _box(double.infinity, double.infinity, radius: 16),
             ),
             const SizedBox(height: 28),
-            // Section title shimmer
             _box(100, 18, radius: 6),
             const SizedBox(height: 16),
-            // Article cards shimmer
             ...List.generate(
                 3,
                 (_) => Padding(
@@ -81,36 +76,6 @@ class ShimmerLoading extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(radius),
-      ),
-    );
-  }
-}
-
-class ShimmerGridLoading extends StatelessWidget {
-  const ShimmerGridLoading({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 0.75,
-          ),
-          itemCount: 6,
-          itemBuilder: (_, __) => Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-        ),
       ),
     );
   }

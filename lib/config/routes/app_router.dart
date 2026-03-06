@@ -7,6 +7,12 @@ import '../../screens/settings/settings_screen.dart';
 import '../../screens/auth/login_screen.dart';
 import '../../screens/auth/register_screen.dart';
 import '../../screens/favorites/favorites_screen.dart';
+import '../../screens/search/search_screen.dart';
+import '../../screens/profile/profile_screen.dart';
+import '../../screens/admin/admin_screen.dart';
+import '../../providers/article_detail_provider.dart';
+import '../../providers/category_articles_provider.dart';
+import 'package:provider/provider.dart';
 
 class AppRouter {
   static const String home = '/';
@@ -16,6 +22,9 @@ class AppRouter {
   static const String login = '/login';
   static const String register = '/register';
   static const String favorites = '/favorites';
+  static const String search = '/search';
+  static const String profile = '/profile';
+  static const String admin = '/admin';
 
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -27,13 +36,25 @@ class AppRouter {
       case categoryArticles:
         final category = routeSettings.arguments as Category;
         return MaterialPageRoute(
-          builder: (_) => CategoryArticlesScreen(category: category),
+          builder: (context) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              context
+                  .read<CategoryArticlesProvider>()
+                  .loadArticles(category.id);
+            });
+            return CategoryArticlesScreen(category: category);
+          },
           settings: routeSettings,
         );
       case articleDetail:
         final articleId = routeSettings.arguments as int;
         return MaterialPageRoute(
-          builder: (_) => ArticleDetailScreen(articleId: articleId),
+          builder: (context) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              context.read<ArticleDetailProvider>().loadDetail(articleId);
+            });
+            return ArticleDetailScreen(articleId: articleId);
+          },
           settings: routeSettings,
         );
       case settings:
@@ -54,6 +75,21 @@ class AppRouter {
       case favorites:
         return MaterialPageRoute(
           builder: (_) => const FavoritesScreen(),
+          settings: routeSettings,
+        );
+      case search:
+        return MaterialPageRoute(
+          builder: (_) => const SearchScreen(),
+          settings: routeSettings,
+        );
+      case profile:
+        return MaterialPageRoute(
+          builder: (_) => const ProfileScreen(),
+          settings: routeSettings,
+        );
+      case admin:
+        return MaterialPageRoute(
+          builder: (_) => const AdminScreen(),
           settings: routeSettings,
         );
       default:

@@ -102,6 +102,62 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Cập nhật thông tin user (name, phone, address)
+  /// Gọi AuthRepo → API, rồi cập nhật _user trong app
+  Future<bool> updateProfile({
+    required String name,
+    String? phone,
+    String? address,
+  }) async {
+    if (_token == null) return false;
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      // Gọi API cập nhật
+      _user = await AuthRepo.updateProfile(
+        _token!,
+        name: name,
+        phone: phone,
+        address: address,
+      );
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _error = e.toString().replaceFirst('Exception: ', '');
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  /// Đổi mật khẩu
+  Future<bool> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    if (_token == null) return false;
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      await AuthRepo.changePassword(
+        _token!,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      );
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _error = e.toString().replaceFirst('Exception: ', '');
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   void clearError() {
     _error = null;
     notifyListeners();

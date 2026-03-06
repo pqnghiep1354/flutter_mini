@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/category_model.dart';
+import '../repos/category_repo.dart';
 
 class SettingsProvider extends ChangeNotifier {
   final Set<int> _hiddenCategoryIds = {};
   bool _loaded = false;
+
+  // ── Category fetching state ──
+  List<Category> categories = [];
+  bool isCategoriesLoading = false;
+  String? categoriesError;
 
   static const String _key = 'hidden_category_ids';
 
@@ -20,6 +27,21 @@ class SettingsProvider extends ChangeNotifier {
     _hiddenCategoryIds.addAll(ids.map(int.parse));
     _loaded = true;
     notifyListeners();
+  }
+
+  /// Gọi API lấy danh sách categories
+  Future<void> loadCategories() async {
+    isCategoriesLoading = true;
+    categoriesError = null;
+    notifyListeners();
+    try {
+      categories = await CategoryRepo.getAll();
+    } catch (e) {
+      categoriesError = e.toString();
+    } finally {
+      isCategoriesLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> toggleCategory(int categoryId) async {
