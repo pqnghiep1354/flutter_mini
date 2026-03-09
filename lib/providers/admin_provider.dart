@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/article_model.dart';
 import '../repos/article_repo.dart';
+import '../providers/my_articles_provider.dart';
 
 /// Provider quản lý trạng thái tạo bài viết (Admin)
 ///
@@ -11,6 +12,10 @@ import '../repos/article_repo.dart';
 ///   → API tạo bài
 ///   → notifyListeners() → UI cập nhật (success/error)
 class AdminProvider extends ChangeNotifier {
+  final MyArticlesProvider _myArticlesProvider;
+
+  AdminProvider(this._myArticlesProvider);
+
   // ── State ──
 
   /// Đang gửi bài hay không
@@ -51,6 +56,11 @@ class AdminProvider extends ChangeNotifier {
         categoryId: categoryId,
         thumb: thumb,
       );
+
+      // Save to Firestore via MyArticlesProvider
+      if (createdArticle != null) {
+        await _myArticlesProvider.createArticle(createdArticle!);
+      }
 
       success = true;
       isLoading = false;

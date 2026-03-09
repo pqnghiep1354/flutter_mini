@@ -10,6 +10,7 @@ import 'providers/article_detail_provider.dart';
 import 'providers/category_articles_provider.dart';
 import 'providers/search_provider.dart';
 import 'providers/admin_provider.dart';
+import 'providers/my_articles_provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -18,18 +19,30 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-            create: (_) => SettingsProvider()
-              ..loadSettings()
-              ..loadCategories()),
         ChangeNotifierProvider(create: (_) => AuthProvider()..tryAutoLogin()),
-        ChangeNotifierProvider(
-            create: (_) => FavoritesProvider()..loadFavorites()),
+        ChangeNotifierProxyProvider<AuthProvider, SettingsProvider>(
+          create: (context) => SettingsProvider(context.read<AuthProvider>())
+            ..loadSettings()
+            ..loadCategories(),
+          update: (context, auth, prev) => prev ?? SettingsProvider(auth),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, FavoritesProvider>(
+          create: (context) => FavoritesProvider(context.read<AuthProvider>()),
+          update: (context, auth, prev) => prev ?? FavoritesProvider(auth),
+        ),
         ChangeNotifierProvider(create: (_) => HomeProvider()..loadData()),
         ChangeNotifierProvider(create: (_) => ArticleDetailProvider()),
         ChangeNotifierProvider(create: (_) => CategoryArticlesProvider()),
-        ChangeNotifierProvider(create: (_) => SearchProvider()),
-        ChangeNotifierProvider(create: (_) => AdminProvider()),
+        ChangeNotifierProxyProvider<AuthProvider, MyArticlesProvider>(
+          create: (context) => MyArticlesProvider(context.read<AuthProvider>()),
+          update: (context, auth, prev) => prev ?? MyArticlesProvider(auth),
+        ),
+        ChangeNotifierProxyProvider<MyArticlesProvider, AdminProvider>(
+          create: (context) =>
+              AdminProvider(context.read<MyArticlesProvider>()),
+          update: (context, myArticles, prev) =>
+              prev ?? AdminProvider(myArticles),
+        ),
       ],
       child: MaterialApp(
         title: 'Articles Hub',

@@ -1,9 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/user_model.dart';
 
 class AuthRepo {
-  static const String _base = 'https://apiforlearning.zendvn.com/api/v2';
+  static String get _base => dotenv.get('API_BASE_URL',
+      fallback: 'https://apiforlearning.zendvn.com/api/v2');
 
   static Future<Map<String, dynamic>> login(
       String email, String password) async {
@@ -133,5 +138,87 @@ class AuthRepo {
       }
     }
     throw Exception(errorMessage);
+  }
+
+  // ============================================================================
+  // GOOGLE SIGN-IN
+  // ============================================================================
+
+  static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  static bool _isGoogleInitialized = false;
+
+  /// Đăng nhập bằng Google (kết hợp Firebase Auth & Backend API)
+  static Future<User> signInWithGoogle() async {
+    try {
+      if (!_isGoogleInitialized) {
+        await _googleSignIn.initialize();
+        _isGoogleInitialized = true;
+      }
+
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+
+      // Không dùng await ở đây đối với pub version > 7.1.0
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final String? idToken = googleAuth.idToken;
+
+      if (idToken == null) {
+        throw Exception('Failed to get Google ID Token.');
+      }
+
+      // -- 1. Đăng nhập vào Firebase (nếu ứng dụng dùng firebase_auth) --
+      try {
+        final firebaseCredential = firebase_auth.GoogleAuthProvider.credential(
+          idToken: idToken,
+        );
+        await firebase_auth.FirebaseAuth.instance
+            .signInWithCredential(firebaseCredential);
+      } catch (firebaseErr) {
+        print('Firebase sign in error: $firebaseErr');
+      }
+
+      // -- 2. Gửi idToken đến Backend API --
+      final res = await http.post(
+        Uri.parse('$_base/auth/google'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: json.encode({'id_token': idToken}),
+      );
+
+      final data = json.decode(res.body);
+
+      if (res.statusCode == 200) {
+        // Lưu token do Backend cấp vào SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        if (data['token'] != null) {
+          await prefs.setString('token', data['token']);
+        } else if (data['access_token'] != null) {
+          await prefs.setString('token', data['access_token']);
+        }
+
+        // Lấy thông tin user
+        String tokenToUse = data['token'] ?? data['access_token'] ?? '';
+        final user = await getCurrentUser(tokenToUse);
+        return user;
+      }
+
+      throw Exception(data['message'] ?? 'Google login failed on backend');
+    } catch (e) {
+      throw Exception('Google sign-in failed: $e');
+    }
+  }
+
+  /// Đăng xuất khỏi Google
+  static Future<void> signOutWithGoogle() async {
+    try {
+      if (!_isGoogleInitialized) {
+        await _googleSignIn.initialize();
+        _isGoogleInitialized = true;
+      }
+      await _googleSignIn.signOut();
+    } catch (e) {
+      print('Google sign out error: $e');
+    }
   }
 }

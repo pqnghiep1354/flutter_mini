@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/article_model.dart';
 
 class ArticleRepo {
-  static const String _base = 'https://apiforlearning.zendvn.com/api/v2';
+  static String get _base => dotenv.get('API_BASE_URL',
+      fallback: 'https://apiforlearning.zendvn.com/api/v2');
 
   static Future<List<Article>> getByCategory(int categoryId,
       {int limit = 20, int page = 1}) async {
@@ -103,5 +105,76 @@ class ArticleRepo {
       return Article.fromJson(d);
     }
     throw Exception(data['message'] ?? 'Failed to create article');
+  }
+
+  /// Danh sách bài viết cá nhân
+  /// API: GET /articles/my-articles — cần Bearer token
+  static Future<List<Article>> getMyArticles(String token) async {
+    final res = await http.get(
+      Uri.parse('$_base/articles/my-articles'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (res.statusCode == 200) {
+      final data = json.decode(res.body);
+      final List list = data is List ? data : (data['data'] ?? []);
+      return list.map((e) => Article.fromJson(e)).toList();
+    }
+    throw Exception('Failed to load my articles');
+  }
+
+  /// Cập nhật bài viết
+  /// API: PUT /articles/{id} — cần Bearer token
+  static Future<Article> update(
+    String token,
+    int articleId, {
+    required String title,
+    required String description,
+    required String content,
+    required int categoryId,
+    String? thumb,
+  }) async {
+    final body = <String, String>{
+      'title': title,
+      'description': description,
+      'content': content,
+      'category_id': categoryId.toString(),
+    };
+    if (thumb != null && thumb.isNotEmpty) body['thumb'] = thumb;
+
+    final res = await http.put(
+      Uri.parse('$_base/articles/$articleId'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+    final data = json.decode(res.body);
+    if (res.statusCode == 200) {
+      final d = data is Map<String, dynamic> && data.containsKey('data')
+          ? data['data']
+          : data;
+      return Article.fromJson(d);
+    }
+    throw Exception(data['message'] ?? 'Failed to update article');
+  }
+
+  /// Xóa bài viết
+  /// API: DELETE /articles/{id} — cần Bearer token
+  static Future<void> delete(String token, int articleId) async {
+    final res = await http.delete(
+      Uri.parse('$_base/articles/$articleId'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (res.statusCode == 200) return;
+
+    final data = json.decode(res.body);
+    throw Exception(data['message'] ?? 'Failed to delete article');
   }
 }

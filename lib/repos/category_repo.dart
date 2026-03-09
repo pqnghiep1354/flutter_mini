@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/category_model.dart';
 
 class CategoryRepo {
-  static const String _base = 'https://apiforlearning.zendvn.com/api/v2';
+  static String get _base => dotenv.get('API_BASE_URL',
+      fallback: 'https://apiforlearning.zendvn.com/api/v2');
 
   static Future<List<Category>> getAll() async {
     final res = await http.get(Uri.parse('$_base/categories_news'));

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
 import '../repos/auth_repo.dart';
 
@@ -59,6 +60,47 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> loginWithGoogle() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      _user = await AuthRepo.signInWithGoogle();
+      final prefs = await SharedPreferences.getInstance();
+      _token = prefs.getString('token'); // or from memory if AuthRepo saves it
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _error = e.toString().replaceFirst('Exception: ', '');
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> loginAnonymously() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      _token = 'anonymous_token';
+      _user = User(
+        id: -1,
+        name: 'Guest User',
+        email: 'anonymous@guest.com',
+      );
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _error = 'Failed to sign in anonymously';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<bool> register({
     required String name,
     required String email,
@@ -77,6 +119,20 @@ class AuthProvider extends ChangeNotifier {
         phone: phone,
         address: address,
       );
+
+      // Save user profile to Firestore using email as the document ID
+      try {
+        await FirebaseFirestore.instance.collection('users').doc(email).set({
+          'name': name,
+          'email': email,
+          'phone': phone,
+          'address': address,
+          'createdAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+      } catch (e) {
+        print('Error saving user profile to Firestore: $e');
+      }
+
       _isLoading = false;
       notifyListeners();
       return true;
@@ -99,6 +155,7 @@ class AuthProvider extends ChangeNotifier {
     _error = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_tokenKey);
+    await AuthRepo.signOutWithGoogle();
     notifyListeners();
   }
 

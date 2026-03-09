@@ -49,7 +49,15 @@ class AppDrawer extends StatelessWidget {
               },
             ),
             // Admin — chỉ hiện khi đã đăng nhập
-            if (auth.isLoggedIn)
+            if (auth.isLoggedIn) ...[
+              DrawerItem(
+                icon: Icons.article_outlined,
+                label: 'My Articles',
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, AppRouter.myArticles);
+                },
+              ),
               DrawerItem(
                 icon: Icons.edit_note,
                 label: 'Create Post',
@@ -58,6 +66,7 @@ class AppDrawer extends StatelessWidget {
                   Navigator.pushNamed(context, AppRouter.admin);
                 },
               ),
+            ],
             const Spacer(),
             const Divider(height: 1),
             DrawerItem(

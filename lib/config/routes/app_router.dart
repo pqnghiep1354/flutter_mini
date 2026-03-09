@@ -10,6 +10,9 @@ import '../../screens/favorites/favorites_screen.dart';
 import '../../screens/search/search_screen.dart';
 import '../../screens/profile/profile_screen.dart';
 import '../../screens/admin/admin_screen.dart';
+import '../../screens/my_articles/my_articles_screen.dart';
+import '../../screens/my_articles/edit_article_screen.dart';
+import '../../models/article_model.dart';
 import '../../providers/article_detail_provider.dart';
 import '../../providers/category_articles_provider.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +28,8 @@ class AppRouter {
   static const String search = '/search';
   static const String profile = '/profile';
   static const String admin = '/admin';
+  static const String myArticles = '/my-articles';
+  static const String editArticle = '/edit-article';
 
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -90,6 +95,17 @@ class AppRouter {
       case admin:
         return MaterialPageRoute(
           builder: (_) => const AdminScreen(),
+          settings: routeSettings,
+        );
+      case myArticles:
+        return MaterialPageRoute(
+          builder: (_) => const MyArticlesScreen(),
+          settings: routeSettings,
+        );
+      case editArticle:
+        final article = routeSettings.arguments as Article;
+        return MaterialPageRoute(
+          builder: (_) => EditArticleScreen(article: article),
           settings: routeSettings,
         );
       default:

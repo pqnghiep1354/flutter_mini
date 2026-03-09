@@ -36,6 +36,22 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     }
   }
 
+  Future<void> _submitGoogle() async {
+    final auth = context.read<AuthProvider>();
+    final success = await auth.loginWithGoogle();
+    if (success && mounted) {
+      Navigator.pop(context);
+    }
+  }
+
+  Future<void> _submitAnon() async {
+    final auth = context.read<AuthProvider>();
+    final success = await auth.loginAnonymously();
+    if (success && mounted) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -111,6 +127,59 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                         : Text('Sign In',
                             style: TextStyle(
                                 fontSize: 16.sp, fontWeight: FontWeight.w600)),
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Row(
+                  children: [
+                    Expanded(child: Divider(color: Colors.grey[300])),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Text('OR',
+                          style: TextStyle(
+                              color: Colors.grey[500],
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                    Expanded(child: Divider(color: Colors.grey[300])),
+                  ],
+                ),
+                SizedBox(height: 16.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 52.h,
+                  child: OutlinedButton.icon(
+                    onPressed: auth.isLoading ? null : _submitGoogle,
+                    icon: Image.network(
+                      'https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png',
+                      height: 24.h,
+                    ),
+                    label: Text('Sign in with Google',
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF1A1A2E))),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Colors.grey[300]!),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14.r)),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 52.h,
+                  child: TextButton(
+                    onPressed: auth.isLoading ? null : _submitAnon,
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.grey[700],
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14.r)),
+                    ),
+                    child: Text('Continue as Guest',
+                        style: TextStyle(
+                            fontSize: 16.sp, fontWeight: FontWeight.w600)),
                   ),
                 ),
               ],

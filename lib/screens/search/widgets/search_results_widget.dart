@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import '../../../config/routes/app_router.dart';
-import '../../../models/article_model.dart';
 import '../../../providers/search_provider.dart';
 import '../../shared/empty_view.dart';
 import '../../shared/error_view.dart';
+import '../../../widgets/shared/article_item.dart';
 
 class SearchResultsWidget extends StatelessWidget {
   final String searchTerm;
@@ -80,108 +78,8 @@ class SearchResultsWidget extends StatelessWidget {
               child: const Center(child: CircularProgressIndicator()),
             );
           }
-          return _buildArticleItem(context, search.results[index]);
+          return ArticleItem(article: search.results[index]);
         },
-      ),
-    );
-  }
-
-  Widget _buildArticleItem(BuildContext context, Article article) {
-    return Card(
-      margin: EdgeInsets.only(bottom: 12.h),
-      elevation: 0,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: InkWell(
-        onTap: () => Navigator.pushNamed(context, AppRouter.articleDetail,
-            arguments: article.id),
-        borderRadius: BorderRadius.circular(12.r),
-        child: Padding(
-          padding: EdgeInsets.all(12.w),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.r),
-                child: article.thumb != null
-                    ? CachedNetworkImage(
-                        imageUrl: article.thumb!,
-                        width: 80.w,
-                        height: 80.w,
-                        fit: BoxFit.cover,
-                        placeholder: (_, __) => Container(
-                          width: 80.w,
-                          height: 80.w,
-                          color: Colors.grey[200],
-                          child: Icon(Icons.image,
-                              color: Colors.grey[400], size: 30.sp),
-                        ),
-                        errorWidget: (_, __, ___) => Container(
-                          width: 80.w,
-                          height: 80.w,
-                          color: Colors.grey[200],
-                          child: Icon(Icons.broken_image,
-                              color: Colors.grey[400], size: 30.sp),
-                        ),
-                      )
-                    : Container(
-                        width: 80.w,
-                        height: 80.w,
-                        color: Colors.grey[200],
-                        child: Icon(Icons.article,
-                            color: Colors.grey[400], size: 30.sp),
-                      ),
-              ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      article.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14.sp,
-                        color: const Color(0xFF1A1A2E),
-                      ),
-                    ),
-                    if (article.description != null) ...[
-                      SizedBox(height: 4.h),
-                      Text(
-                        article.description!,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            TextStyle(color: Colors.grey[600], fontSize: 12.sp),
-                      ),
-                    ],
-                    if (article.categoryName != null) ...[
-                      SizedBox(height: 6.h),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 8.w, vertical: 2.h),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF6C63FF).withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(4.r),
-                        ),
-                        child: Text(
-                          article.categoryName!,
-                          style: TextStyle(
-                            color: const Color(0xFF6C63FF),
-                            fontSize: 11.sp,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
